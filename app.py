@@ -1,5 +1,5 @@
 ﻿import os
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from dotenv import load_dotenv
 import google.genai as genai
 from google.genai.errors import APIError
@@ -146,6 +146,17 @@ def about_page():
     """サービス紹介ページ（LP）を表示するページ"""
     return render_template('about.html')
 
+@app.route('/sitemap.xml', methods=['GET'])
+def sitemap():
+    """sitemap.xml ファイルをルートディレクトリから提供する"""
+    # Flaskのルートディレクトリからsitemap.xmlを探して返す
+    return send_from_directory(app.root_path, 'sitemap.xml', mimetype='application/xml')
+
+@app.route('/robots.txt', methods=['GET'])
+def robots():
+    """（ついでに）robots.txt ファイルをルートディレクトリから提供する"""
+    # Renderでデプロイする場合、robots.txtも明示的にルートを追加するのが安全
+    return send_from_directory(app.root_path, 'robots.txt', mimetype='text/plain')
 
 # --- アプリケーションの実行 ---
 if __name__ == '__main__':
