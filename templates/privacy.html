@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プライバシーポリシー | AIシェフ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* 強力なリセット：すべての要素のデフォルトマージンを確実に0にする */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            /* iFrame内の描画領域を確実に確保 */
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #f4f7f6;
+        }
+
+        /* コンテンツラッパーを絶対位置に配置し、上部を50px空ける */
+        .pp-content-wrapper {
+            position: absolute;
+            top: 50px; /* ウィンドウの上端から50px下に強制的に移動 */
+            left: 0;
+            right: 0;
+            bottom: 0;
+            /* スクロールをここで実行 */
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+            background-color: #f4f7f6;
+        }
+
+        /* コンテンツコンテナのスタイル */
+        .pp-container {
+            background-color: white;
+            padding: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 0;
+            margin-bottom: 50px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+            /* h1のスタイル */
+            .pp-container h1 {
+                font-size: 2em;
+                border-bottom: 2px solid #f59e0b;
+                padding-bottom: 5px;
+                margin-top: 0;
+            }
+
+            /* h2のスタイル */
+            .pp-container h2 {
+                font-size: 1.5em;
+                border-bottom: 1px solid #ccc;
+                padding-bottom: 3px;
+                margin-top: 30px;
+            }
+
+            /* リストのスタイル */
+            .pp-container ul, .pp-container ol {
+                padding-left: 25px;
+                margin-bottom: 15px;
+            }
+
+            /* 強調文字のスタイル */
+            .pp-container strong {
+                color: #ea580c;
+            }
+
+            /* 水平線のスタイル */
+            .pp-container hr {
+                margin: 20px 0;
+                border: none;
+                border-top: 1px solid #eee;
+            }
+    </style>
+</head>
+<body>
+    <div class="pp-content-wrapper">
+        <div class="pp-container">
+            <h1>プライバシーポリシー</h1>
+
+            <p>本サービス（「AIシェフ」）は、ユーザーの個人情報保護の重要性を認識し、法令および本ポリシーに基づき、適切な取り扱いを徹底します。</p>
+
+            <hr>
+
+            <h2>第1条 収集する情報とその方法</h2>
+            <p>本サービスでは、以下の情報を収集します。これは、サービスの提供と品質向上のために不可欠です。</p>
+            <ul>
+                <li>チャット履歴情報: ユーザーがAIに入力したテキスト（例：使いたい材料、気分、人数）およびAIからの応答テキスト。</li>
+                <li>アクセス情報: 利用日時、アクセス元のIPアドレス、使用されたブラウザの種類など。</li>
+                <li>広告利用情報: 広告配信事業者（Google AdSense等）が収集する情報。</li>
+            </ul>
+
+            <hr>
+
+            <h2>第2条 取得情報の利用目的</h2>
+            <p>本サービスは、取得した情報を以下の目的で利用します。</p>
+            <ol>
+                <li>サービスの提供・維持: ユーザーのリクエストに基づき、AIがレシピを考案し、対話を継続するため。</li>
+                <li>広告配信: サービスに掲載された広告の配信および効果測定のため。</li>
+                <li>品質向上: サービスの問題を分析し、機能改善、品質維持に役立てるため。</li>
+            </ol>
+
+            <hr>
+
+            <h2>第3条 第三者への情報提供（Googleへの提供）</h2>
+            <p>本サービスは、ユーザーの同意なく、法令に定められた場合を除き、第三者に個人情報を提供しません。ただし、以下の特記事項があります。</p>
+
+            <h3>AIプロバイダーへの提供に関する特記事項</h3>
+            <ul>
+                <li>本サービスは、レシピ生成のためにGoogle Gemini API（無償版）を利用しています。</li>
+                <li>ユーザーが入力したプロンプト、応答、および会話履歴は、Google LLCに送信されます。</li>
+                <li>Googleはこれらの情報を、同社のAIモデルの学習や製品の改善のために利用する可能性があります。</li>
+            </ul>
+            <p>※ユーザーは、本サービスを利用することで、このGoogleのデータ利用方針に同意したものとみなされます。</p>
+
+            <hr>
+
+            <h2>第3条の2 AIの利用に関する免責事項</h2>
+            <p>本サービスはAIモデルによるレシピ考案機能を提供していますが、AIは不正確な情報（ハルシネーション）を生成する可能性があります。</p>
+            <ul>
+                <li>生成されたレシピの分量、調理手順、特にアレルギーや食中毒のリスクに関する情報は、必ずユーザーご自身の責任において事前に確認し、安全にご利用ください。</li>
+                <li>本サービスは、AIが提供した情報に基づいてユーザーまたは第三者に発生した、いかなる損害についても、一切の責任を負いません。</li>
+            </ul>
+            <hr>
+
+            <h2>第4条 ユーザーの権利と問い合わせ先</h2>
+            <p>ユーザーは、ご自身の情報に関して、開示、訂正、利用停止、削除などを請求する権利があります。</p>
+            <p>請求や本ポリシーに関する質問は、下記窓口にご連絡ください。</p>
+            <p><strong>お問い合わせ先</strong>: yoshigame41@gmail.com</p>
+
+            <p><strong>制定日</strong>: 2025年10月5日</p>
+        </div>
+    </div>
+</body>
+</html>

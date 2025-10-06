@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIシェフ | レシピ考案</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+        // モバイルブラウザのUIの変動に対応するため、CSS変数を設定
+        function setViewportHeight() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        setViewportHeight();
+        window.addEventListener('resize', setViewportHeight);
+
+        // ページ読み込み完了時にチャットを初期化する
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeChatOnLoad();
+        });
+
+        function initializeChatOnLoad() {
+            const chatBox = document.getElementById('chat-box');
+            // 画面上のメッセージをクリア
+            chatBox.innerHTML = '';
+
+            // 最初のAIメッセージを再表示
+            appendMessage("AIシェフです。まずは**使いたい材料**を教えてください。（例：鶏肉、玉ねぎ）", 'ai');
+        }
+
+        // メッセージを画面に追加する関数
+        function appendMessage(text, sender) {
+            const chatBox = document.getElementById('chat-box');
+
+            // メッセージとボタンをまとめるラッパー
+            const messageWrapper = document.createElement('div');
+            messageWrapper.className = `message-wrapper ${sender}`;
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `${sender}-message`;
+
+            if (sender === 'ai') {
+                messageDiv.innerHTML = marked.parse(text);
+            } else {
+                messageDiv.textContent = text;
+            }
+
+            // メッセージ本体をラッパーに追加
+            messageWrapper.appendChild(messageDiv);
+
+            // user-message の横に編集ボタンを追加
+            if (sender === 'user') {
+                const editButton = document.createElement('button');
+                editButton.className = 'edit-button';
+                editButton.textContent = '✎'; // 編集アイコン
+                // 編集ボタンが押された時の処理を定義
+                editButton.onclick = () => editMessage(messageDiv.textContent, messageWrapper);
+                messageWrapper.appendChild(editButton);
+            }
+
+            // チャットボックスの末尾に追加
+            chatBox.appendChild(messageWrapper);
+
+            // スクロールを最下部に移動
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        /**
+         * ユーザーメッセージの編集を開始するロジック
+         */
+        function editMessage(originalText, messageWrapper) {
+            const inputElement = document.getElementById('user-input');
+
+            // 1. 元のテキストを入力欄にセット
+            inputElement.value = originalText;
+            inputElement.focus();
+
+            // 2. サーバー側に履歴を巻き戻すようリクエストを送る
+            fetch('/undo_history', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: originalText }) // 編集対象のメッセージを送信
+            });
+
+            // 3. 画面上のメッセージを削除（ユーザーメッセージと直後のAI応答のみ）
+
+            // 編集対象のメッセージの直後の要素を取得 (AI応答の可能性が高い)
+            let nextElement = messageWrapper.nextSibling;
+
+            // 編集対象のメッセージ（ユーザーメッセージ）を画面から削除
+            messageWrapper.remove();
+
+            // 削除したユーザーメッセージの直後の要素（AI応答）を削除
+            if (nextElement && nextElement.classList && nextElement.classList.contains('ai')) {
+                nextElement.remove();
+            }
+
+            // 4. それ以前のメッセージは画面に残る
+
+            document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
+        }
+
+        // モーダルを閉じる関数 (レシピ用)
+        function closeModal() {
+            document.getElementById('recipe-modal').style.display = 'none';
+        }
+
+        // ★新規追加: PPモーダルを開く関数
+        function openPPModal(event) {
+            // リンクのデフォルト動作（タブ遷移）をキャンセル
+            event.preventDefault();
+
+            const ppIframe = document.getElementById('pp-iframe');
+            // iframeに privacy.html のURLをセットしてロード
+            ppIframe.src = '{{ url_for("privacy_policy") }}';
+
+            // モーダルを表示
+            document.getElementById('pp-modal').style.display = 'flex';
+        }
+
+        // ★新規追加: PPモーダルを閉じる関数
+        function closePPModal() {
+            document.getElementById('pp-modal').style.display = 'none';
+            // iFrameの読み込みをリセット
+            document.getElementById('pp-iframe').src = '';
+        }
+
+        // ユーザー入力を処理し、サーバーに送信する関数
+        async function sendMessage(event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            const inputElement = document.getElementById('user-input');
+            const message = inputElement.value.trim();
+            if (!message) return;
+
+            // 1. ユーザーメッセージを画面に表示
+            appendMessage(message, 'user');
+            inputElement.value = '';
+
+            // 2. ローディングメッセージを表示
+            const loadingMessage = document.createElement('div');
+            loadingMessage.className = 'ai-message loading';
+            loadingMessage.textContent = 'AIシェフが考え中です...';
+
+            const chatBox = document.getElementById('chat-box');
+            chatBox.appendChild(loadingMessage);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                // 3. API経由でバックエンドに送信
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+
+                const data = await response.json();
+
+                // 4. ローディングメッセージを削除
+                loadingMessage.remove();
+
+                // 5. AIの応答を処理
+                const aiResponse = data.message;
+
+                if (aiResponse.includes('【豆知識・ポイント】')) {
+                    appendMessage(aiResponse, 'ai');
+                    document.getElementById('recipe-display').innerHTML = marked.parse(aiResponse);
+                    document.getElementById('recipe-modal').style.display = 'flex';
+                } else {
+                    appendMessage(aiResponse, 'ai');
+                }
+
+            } catch (error) {
+                loadingMessage.remove();
+                appendMessage("通信エラーが発生しました。サーバーが起動しているか確認してください。", 'ai');
+                console.error('Fetch Error:', error);
+            }
+        }
+
+        // チャット履歴をリセットする機能 (resetボタン用)
+        async function resetChat() {
+            if (!confirm("チャット履歴をリセットして最初からやり直しますか？")) {
+                return;
+            }
+
+            const response = await fetch('/reset', { method: 'POST' });
+            if (response.ok) {
+                initializeChatOnLoad();
+                // ポップアップは削除
+            } else {
+                alert("リセットに失敗しました。サーバーを確認してください。");
+            }
+        }
+
+        // Enterキーで送信できるようにする
+        document.getElementById('user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage(e);
+            }
+        });
+    </script>
+</head>
+<body>
+    <div id="chat-container">
+        <header id="chat-header">
+            <h1>🍳 AIシェフにお任せ</h1>
+            <button onclick="resetChat()" id="reset-button">リセット</button>
+        </header>
+
+        <div id="chat-box">
+        </div>
+
+        <div id="chat-footer">
+            <p class="disclaimer-text">
+                AIが生成するレシピは不正確な場合があります。必ずご自身の責任で内容を再確認し、安全にご利用ください。
+                本サービスは、AIが提供した情報に基づいてユーザーまたは第三者に発生したいかなる損害についても、一切の責任を負いません。
+            </p>
+            <a href="#" onclick="openPPModal(event)">プライバシーポリシー</a>
+        </div>
+
+        <form id="dynamic-input-area" onsubmit="sendMessage(event)">
+            <input type="text" id="user-input" placeholder="メッセージを入力...">
+            <button type="submit">送信</button>
+        </form>
+
+    </div>
+
+    <div id="recipe-modal" style="display: none;">
+        <div id="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <h2>🎉 AIが考案したオリジナルレシピ 🎉</h2>
+            <div id="recipe-display">
+            </div>
+        </div>
+    </div>
+
+    <div id="pp-modal" style="display: none;">
+        <div id="pp-modal-content">
+            <span class="close-button" onclick="closePPModal()">&times;</span>
+
+            <iframe id="pp-iframe" src="" frameborder="0"></iframe>
+        </div>
+    </div>
+</body>
+</html>

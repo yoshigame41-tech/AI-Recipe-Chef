@@ -1,0 +1,310 @@
+﻿body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* モバイル対応: JavaScriptで計算した変数を使用 */
+    height: calc(var(--vh, 1vh) * 100);
+    margin: 0;
+    overflow: hidden;
+}
+
+#chat-container {
+    background: white;
+    width: 100%;
+    max-width: 700px;
+    /* モバイル対応: JavaScriptで計算した変数を使用 */
+    height: calc(var(--vh, 1vh) * 100);
+    border-radius: 0;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* ヘッダーのスタイル */
+#chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px 0 15px;
+    background-color: #f59e0b;
+    border-bottom: 1px solid #ddd;
+    flex-shrink: 0;
+}
+
+    #chat-header h1 {
+        font-size: 1.5em;
+        margin: 0;
+        padding: 15px 0;
+        color: white;
+        text-align: left;
+        flex-grow: 1;
+    }
+
+#chat-box {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: scroll;
+    background-color: #fff;
+    padding-bottom: 0; /* フッターと入力欄があるため調整 */
+}
+
+/* フッター (プライバシーポリシーリンク/免責事項) のスタイル */
+#chat-footer {
+    padding: 10px 15px;
+    text-align: center;
+    border-top: 1px solid #eee;
+    background-color: #f9f9f9;
+    flex-shrink: 0;
+}
+
+    /* フッター内の免責事項のスタイル */
+    #chat-footer .disclaimer-text {
+        font-size: 0.75em; /* 小さめの文字 */
+        color: #cc3300; /* 注意を促す赤色系 */
+        padding: 0 0 5px 0; /* 下に少し余白 */
+        margin: 0;
+        line-height: 1.4;
+        font-weight: bold;
+        border-bottom: 1px dashed #f0b299; /* 点線で区切り */
+        display: block;
+    }
+
+    #chat-footer a {
+        color: #1e40af;
+        text-decoration: none;
+        font-size: 0.85em;
+        padding-top: 5px;
+        display: block; /* ブロック要素にしてdisclaimer-textの下に配置 */
+    }
+
+
+/* メッセージのスタイル */
+.message-wrapper {
+    display: flex;
+    align-items: flex-end; /* メッセージとボタンを下揃え */
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.user-message, .ai-message {
+    padding: 10px 15px;
+    border-radius: 18px;
+    margin-bottom: 0; /* ラッパーでマージンを管理 */
+    max-width: 85%;
+    line-height: 1.6;
+    word-wrap: break-word;
+}
+
+.user-message {
+    background-color: #e0f2fe;
+    color: #1e40af;
+    border-top-right-radius: 2px;
+}
+
+.message-wrapper.user {
+    justify-content: flex-end; /* 右寄せ */
+}
+
+.ai-message {
+    background-color: #f0fdf4;
+    color: #166534;
+    border-top-left-radius: 2px;
+}
+
+.message-wrapper.ai {
+    justify-content: flex-start; /* 左寄せ */
+}
+
+/* 編集ボタンのスタイル */
+.edit-button {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.2em;
+    padding: 0 5px;
+    cursor: pointer;
+    transition: color 0.2s;
+    height: fit-content;
+    margin-bottom: 3px;
+    margin-left: 5px;
+}
+
+    .edit-button:hover {
+        color: #333;
+    }
+
+.message-wrapper.ai .edit-button {
+    display: none;
+}
+
+.ai-message h2, .ai-message h3 {
+    margin-top: 10px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    color: #059669;
+}
+
+.ai-message p {
+    margin: 5px 0;
+}
+
+/* 入力欄のスタイル */
+#dynamic-input-area {
+    display: flex;
+    padding: 10px 15px;
+    border-top: 1px solid #eee;
+    background-color: #fafafa;
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 50;
+}
+
+#user-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 1em;
+    margin-right: 8px;
+}
+
+button {
+    background-color: #f59e0b;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+}
+
+    button:not(.edit-button):hover {
+        background-color: #ea580c;
+    }
+
+/* リセットボタンのスタイル */
+#reset-button {
+    background-color: white;
+    color: #f59e0b;
+    border: 1px solid #f59e0b;
+    padding: 8px 12px;
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+    #reset-button:hover {
+        background-color: #fce5c6;
+        color: #ea580c;
+    }
+
+.loading {
+    font-style: italic;
+    color: #888;
+}
+
+/* --- モーダル (レシピ) スタイル --- */
+#recipe-modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: calc(var(--vh, 1vh) * 100);
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#modal-content {
+    background-color: white;
+    padding: 30px 20px;
+    border-radius: 10px;
+    width: 95%;
+    max-width: 700px;
+    position: relative;
+    max-height: calc(var(--vh, 1vh) * 95);
+    overflow-y: auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+    #modal-content h2 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 1.8em;
+        color: #f59e0b;
+    }
+
+.close-button {
+    color: #aaa;
+    font-size: 36px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+    .close-button:hover,
+    .close-button:focus {
+        color: #333;
+        text-decoration: none;
+    }
+
+#recipe-display {
+    padding-top: 25px;
+}
+
+/* --- プライバシーポリシーモーダル スタイル --- */
+#pp-modal {
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: calc(var(--vh, 1vh) * 100);
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#pp-modal-content {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    width: 95%;
+    max-width: 850px;
+    height: 90vh;
+    max-height: calc(var(--vh, 1vh) * 90);
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-top: 5vh; /* 外側からの押し下げマージン */
+}
+
+/* iFrameのスタイル */
+#pp-iframe {
+    flex-grow: 1;
+    width: 100%;
+    border: none;
+    margin-top: 10px;
+}
+
+/* PPモーダルの閉じるボタンの位置調整 */
+#pp-modal-content .close-button {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    color: #333;
+    font-size: 36px;
+    cursor: pointer;
+    z-index: 1002;
+}

@@ -1,0 +1,14 @@
+# .gitignore
+
+# 仮想環境を無視
+ai_recipe_venv/
+
+# Pythonキャッシュを無視
+__pycache__/
+*.pyc
+
+# APIキー設定ファイルを無視（最重要）
+.env
+
+# IDEの一時ファイルを無視 (任意)
+*.swp
