@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -8,46 +8,55 @@
     
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        /* ページ全体のリセット */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        /* ページの基本設定 */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7f6;
-            padding-bottom: 50px;
+            padding-bottom: 0; /* 下部のマージンをリセット */
+            margin: 0;
+            /* ★修正ポイント1: 高さを100vhではなく、CSS変数を使って設定 */
+            height: calc(var(--vh, 1vh) * 100);
+            overflow-y: scroll; /* ページ全体でスクロールを有効にする */
         }
+
         .lp-container {
             max-width: 900px;
-            margin: 30px auto;
+            /* ★修正ポイント2: 画面最上部と最下部に安全なマージンを確保 */
+            margin: 50px auto 50px auto;
             background: white;
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        .lp-container h1 {
-            color: #f59e0b;
-            border-bottom: 3px solid #f59e0b;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        .lp-container h2 {
-            color: #ea580c;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-        }
-        .lp-container p {
-            line-height: 1.7;
-            margin-bottom: 15px;
-        }
-        .lp-container ul {
-            list-style-type: disc;
-            margin-left: 20px;
-        }
+
+            /* ヘッダーや要素のスタイルはそのまま */
+            .lp-container h1 {
+                color: #f59e0b;
+                border-bottom: 3px solid #f59e0b;
+                padding-bottom: 10px;
+                /* ★修正ポイント3: h1の上部マージンをリセットし、見切れを防ぐ */
+                margin-top: 0;
+                margin-bottom: 20px;
+            }
+
+            .lp-container h2 {
+                color: #ea580c;
+                margin-top: 30px;
+                margin-bottom: 15px;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 5px;
+            }
+
+            .lp-container p {
+                line-height: 1.7;
+                margin-bottom: 15px;
+            }
+
+            .lp-container ul {
+                list-style-type: disc;
+                margin-left: 20px;
+            }
+
         .cta-button {
             display: inline-block;
             background-color: #059669;
