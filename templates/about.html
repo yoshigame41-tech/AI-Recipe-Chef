@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIシェフの特長 | 無料のAIレシピ考案・献立提案サービス</title>
+    <meta name="description" content="AIシェフは、Geminiを活用した無料のAIレシピ考案サービスです。材料、時間、人数、健康目的から瞬時にオリジナル献立を提案。時短、節約、料理のマンネリ解消をサポートします。">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* ページ全体のリセット */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            padding-bottom: 50px;
+        }
+        .lp-container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .lp-container h1 {
+            color: #f59e0b;
+            border-bottom: 3px solid #f59e0b;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .lp-container h2 {
+            color: #ea580c;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .lp-container p {
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+        .lp-container ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #059669;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="lp-container">
+        <h1>AIシェフとは？ 【無料のAI献立提案サービス】</h1>
+
+        <p>AIシェフは、Google Gemini APIを活用した、**完全無料のAIレシピ考案サービス**です。冷蔵庫の残り物や特定の目的に合わせた、**独創的で効率的な献立**を瞬時に提案します。もう今日の夕食に悩む必要はありません！</p>
+
+        <a href="{{ url_for('index') }}" class="cta-button">今すぐ無料でレシピ考案を始める！</a>
+
+        <h2>AIシェフの３つの強み</h2>
+        <ul>
+            <li>**① 高精度なレシピ考案（Gemini採用）**: 食材、調理時間、アレルギー情報を考慮した、安全で再現性の高いレシピを生成します。</li>
+            <li>**② 料理のマンネリ解消**: これまで思いつかなかったような、**独創的な組み合わせの献立**を提案し、毎日の食卓を豊かにします。</li>
+            <li>**③ 時間と節約**: 残り物を有効活用できるレシピや、最短5分でできる**時短レシピ**に特化し、忙しい主婦・学生の方の生活をサポートします。</li>
+        </ul>
+
+        <h2>サービスの利用方法（簡単3ステップ）</h2>
+        <ol>
+            <li>チャットで「使いたい材料」や「避けたい材料」をAIに伝えます。</li>
+            <li>「ダイエット中」「節約したい」など、**目的や人数**を伝えます。</li>
+            <li>AIが生成したオリジナルレシピをモーダルウィンドウで確認し、調理を開始します。</li>
+        </ol>
+
+        <h2>免責事項にご注意ください</h2>
+        <p style="color: #cc3300; font-weight: bold;">
+            AIが生成するレシピは不正確な場合があります。必ずご自身の責任で内容を再確認し、安全にご利用ください。詳細については、フッターのプライバシーポリシーをご確認ください。
+        </p>
+    </div>
+</body>
+</html>

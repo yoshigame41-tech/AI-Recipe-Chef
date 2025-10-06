@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AIシェフ | 無料でレシピ考案-材料から献立提案</title>
-    <meta name="google-site-verification" content="d9tVrjHPE0U6VaiXUkHM50b4pp4FhYgbMQ5o7fqL3h4" />
+    <meta name="description" content="Gemini AIがあなたの冷蔵庫の材料、目的、人数に合わせて独創的で安全なレシピを即座に考案します。時短・節約・健康レシピ探しに最適。">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
@@ -209,7 +209,8 @@
 <body>
     <div id="chat-container">
         <header id="chat-header">
-            <h1>🍳 AIシェフのレシピ提案!</h1>
+            <h1>🍳 AIシェフにお任せ</h1>
+            <a href="{{ url_for('about_page') }}" id="about-link">サービス概要</a>
             <button onclick="resetChat()" id="reset-button">リセット</button>
         </header>
 

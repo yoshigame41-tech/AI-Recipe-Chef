@@ -141,6 +141,11 @@ def privacy_policy():
     """プライバシーポリシーを表示するページ"""
     return render_template('privacy.html') 
 
+@app.route('/about')
+def about_page():
+    """サービス紹介ページ（LP）を表示するページ"""
+    return render_template('about.html')
+
 
 # --- アプリケーションの実行 ---
 if __name__ == '__main__':
